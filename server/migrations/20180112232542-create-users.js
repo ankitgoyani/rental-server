@@ -14,6 +14,10 @@ module.exports = {
       firstName: {
         type: Sequelize.STRING,
       },
+      type: {
+        type: Sequelize.ENUM,
+        values: ['tenant', 'renter']
+      },
       lastName: {
         type: Sequelize.STRING,
       },

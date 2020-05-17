@@ -25,6 +25,10 @@ const UserSchema = {
   lastName: {
     type: Sequelize.STRING,
   },
+  type: {
+    type: Sequelize.ENUM,
+    values: ['tenant', 'renter']
+  },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
