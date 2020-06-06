@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "tourism-f8f9c",
+  "private_key_id": "e78253ece2a71ed84883f0e3d4a7c642b8e2a529",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDH22vqRvGO84Pu\nwD7Qymu/A5MYbWrxDPVxt5jBVgcBcnnOQ/eATf4wedec6FaA3st2TAXH+TnKUxBG\nnMjQwg9EVJGcjhUOchWFWGl6B4GJKQc8P4Eq3v4/fWYYtf5sHj9SO4gEzH4eTLi8\n6bMOEtzftIo0dFU8Rq8XnHOprhFLUAbgsursMdzJH9y8gyUcbdcAQaSQNPekuNDj\nrvINqF2a+UOLOUGcK/deQVYo54gczbGud/ebDlcqRbWscgy1TFe881EcX/pW1Ahr\nDrN02zwvCItd/EyHJjJejn9vKu8vrm7gbz1nE68Q3Dk5/drUR5kDNrmez3BGD+J1\nBSO7Cnn3AgMBAAECggEAX+0RfwFOMC7xxEbB37VIwgYVNERQcCKoLEzTJPkFo8wu\narJ0uUC2IM5ajxV1b6WAQud6XuFgu5vi1AGs4YZDjaiJu3r24FghvD8TYV747byj\nnGdeuBUQM6kct/+ifoKGIhIw1xzP6/snMIV7S+YB3d3p+ANeZfAHWm3dljPWWS7W\ncztpMcdjWAUTNDX/Q54iSHFBr+vTVyD+Zuk8bxnDffdtpeGhcf/xLOFHvBJKixdj\nhgjkcxrdvh09j8CM/vE2SrBoqcHPLjqZ4EfR34uWmzaLItK3u6TVVFcMcQrM8RlO\nuBlfcuVhdPLHRjXyKIrAVxLM+U74BhQr9812thE0AQKBgQDylI87snDO9tF6UTrQ\nSUBt/pzr/v2e1Gu+shmRbMbJb/Bm0KYgEgKCAHMH2EFgDNOAmLM0JBKN6mFYZKbk\nam0yV85/urDp/EWbljJ6cNEHU61igE43agwJhu7faaN/dSSNqHUaRYupDv6qw3FS\nEtINBZ8qdadMSL3qbPg5xoxWkQKBgQDS6dAdzMK0f/FSERmObmnIAkQFH49YRM6W\nr9Qc+s7v5+K+zTN+nObDY+fronjJzx19q+8guvXrbDScdWI7TsrrnRTGOw4tZBzQ\nGI66Y2B88Jqm93rSln0+g2egegLlNvjSwOVfMJjJHQuu0CiXnMOaTJssGZBuTOlk\nAuU1+JhcBwKBgQCbjlyTYYgpj+kg0PowGukwH/gs9eVZdsppDPiMYv7OqfO1WtNM\n+X+WMgeR3kF+AHuYmVNBemhTjRtDfbfv/bdscxY+nk9YnKdecGCKV9ITKrui0LhX\nnK9/ZIHFzo5D67C3DnGZmUNH9A+nHZGLmfoM07APoEbaCkOPErXTBtlzoQKBgB0b\nDxFNtIDcNx0wJuq06fwj8+cRF+MCe8/nq8nkArKwuWXDQ5vxYxcLrnGiFjEjV9qD\n45gMtOssH4aH3Gp60R36q2c/txEkg6Vj/i5SkHotaeootNZi1h3OXHqU29lt4KCU\n5hJgznTSgU46g5+IjqW4dKF9VaUjEAIxNBhimgP5AoGBALAYWifg7Iz07mLtLKbB\nOlC9IAjGy6tzh6sd4amdbxFTvp0T3DhX2TLv9TxdUkmv2nHSthrzTb/LW+7vqHRW\nYEoFazxo+PQR7snF6DaLtprH9Ff6gYBkjjZLvV7GiETaKtV2LormjI87mNlo+d5b\nk12OF5jXrzT4uLK+8Iv6V0Ju\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-pwuk0@tourism-f8f9c.iam.gserviceaccount.com",
+  "client_id": "116684718795197374573",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-pwuk0%40tourism-f8f9c.iam.gserviceaccount.com"
+}

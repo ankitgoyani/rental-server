@@ -1,4 +1,15 @@
 const Apartment = require('./apartment.model');
+const admin = require("firebase-admin");
+const serviceAccount = require("../../config/key.json");
+const _ = require('lodash');
+const util = require('util');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: `${serviceAccount.project_id}.appspot.com`
+});
+
+const bucket = admin.storage().bucket();
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -54,12 +65,54 @@ function update(req, res, next) {
     .catch(handleError(res));
 }
 
-function create(req, res, next) {
-  const apartment = req.body;
+const uploadImageToStorage = (files) => {
+  let promises = [];
+  _.forEach(files, (file) => {
+    promises.push(new Promise( (resolve, reject) => {
+        let newFileName = `${file.originalname}_${Date.now()}`;
+        let fileUpload = bucket.file("apartments/" + newFileName);
+        const blobStream = fileUpload.createWriteStream({
+          metadata: {
+            contentType: file.mimetype
+          }
+        });
+        blobStream.on('error', (error) => {
+          reject({message: 'Something is wrong! Unable to upload at the moment.'});
+        });
+        blobStream.on('finish', async function(success) {
+          await fileUpload.makePublic();
+          const url = util.format(`https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`);
+          resolve(url);
+        });
+        blobStream.end(file.buffer);
+      })
+    );
+  });
+  return Promise.all(promises);
+}
 
-  return Apartment.create(apartment)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+function create(req, res, next) {
+  const apt = req.body;
+  apt.location = {
+    type: 'Point',
+    coordinates: JSON.parse(apt.location),
+    crs: {type: 'name', properties: {name: 'EPSG:4326'}}
+  };
+
+  if (req.files) {
+    uploadImageToStorage(req.files).then((success) => {
+      apt.photos = JSON.stringify(success);
+      Apartment.create(apt)
+        .then((apartment)=> {
+          apartment.photos = apartment.photos ? JSON.parse(apartment.photos) : null;
+          return res.status(201).json(apartment);
+        })
+        .catch(handleError(res));
+    }).catch((error) => {
+      res.status(500).send(error);
+    });
+  }
+
 }
 
 function list(req, res, next) {

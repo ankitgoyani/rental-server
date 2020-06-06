@@ -27,7 +27,7 @@ const UserSchema = {
   },
   type: {
     type: Sequelize.DataTypes.ENUM,
-    values: ['Tenant', 'Renter']
+    values: ['Tenant', 'Renter'],
   },
   phone: {
     type: Sequelize.DataTypes.STRING,

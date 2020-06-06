@@ -25,6 +25,6 @@ router.use((req, res, next) => {
 
 // mount user routes at /users
 router.use('/users', userRoutes);
-router.use('/apartment', aptRoutes);
+router.use('/apartment', aptRoutes.router);
 
 module.exports = router;

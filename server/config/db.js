@@ -3,6 +3,21 @@ const debug = require('debug')('node-server:db');
 const config = require('./index');
 
 const { db: dbDetails } = config;
+const wkx = require('wkx');
+
+Sequelize.GEOMETRY.prototype._stringify = function _stringify(value, options) {
+  return `ST_GeomFromText(${options.escape(wkx.Geometry.parseGeoJSON(value).toWkt())})`;
+};
+Sequelize.GEOMETRY.prototype._bindParam = function _bindParam(value, options) {
+  return `ST_GeomFromText(${options.bindParam(wkx.Geometry.parseGeoJSON(value).toWkt())})`;
+};
+Sequelize.GEOGRAPHY.prototype._stringify = function _stringify(value, options) {
+  return `ST_GeomFromText(${options.escape(wkx.Geometry.parseGeoJSON(value).toWkt())})`;
+};
+Sequelize.GEOGRAPHY.prototype._bindParam = function _bindParam(value, options) {
+  return `ST_GeomFromText(${options.bindParam(wkx.Geometry.parseGeoJSON(value).toWkt())})`;
+};
+
 const sequelize = new Sequelize(dbDetails.database, dbDetails.username, dbDetails.password, {
   host: dbDetails.host,
   dialect: 'mysql',

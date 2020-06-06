@@ -20,7 +20,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM,
-        values: ['Tenant', 'Renter']
+        values: ['Tenant', 'Renter'],
       },
       lastName: {
         type: Sequelize.STRING,
