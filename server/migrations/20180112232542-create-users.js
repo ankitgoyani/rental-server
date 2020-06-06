@@ -14,9 +14,13 @@ module.exports = {
       firstName: {
         type: Sequelize.STRING,
       },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       type: {
         type: Sequelize.ENUM,
-        values: ['tenant', 'renter']
+        values: ['Tenant', 'Renter']
       },
       lastName: {
         type: Sequelize.STRING,

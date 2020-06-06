@@ -10,36 +10,40 @@ const APIError = require('../../helpers/APIError');
  */
 const UserSchema = {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.DataTypes.BIGINT,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
   email: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
   firstName: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
   },
   lastName: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
   },
   type: {
-    type: Sequelize.ENUM,
-    values: ['tenant', 'renter']
+    type: Sequelize.DataTypes.ENUM,
+    values: ['Tenant', 'Renter']
+  },
+  phone: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
   },
   password: {
-    type: Sequelize.STRING,
+    type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
   createdAt: {
     allowNull: false,
-    type: Sequelize.DATE,
+    type: Sequelize.DataTypes.DATE,
   },
   updatedAt: {
     allowNull: false,
-    type: Sequelize.DATE,
+    type: Sequelize.DataTypes.DATE,
   },
 };
 

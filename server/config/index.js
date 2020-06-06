@@ -13,7 +13,7 @@ const envVarsSchema = Joi.object({
     .default(4040),
   JWT_SECRET: Joi.string().required()
     .description('JWT Secret required to sign'),
-  JWT_EXPIRES_IN: Joi.number().default(1440)
+  JWT_EXPIRES_IN: Joi.number().default(86400)
     .description('JWT expiration time in seconds'),
 }).unknown()
   .required();
