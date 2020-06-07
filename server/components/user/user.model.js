@@ -59,7 +59,7 @@ const User = db.sequelize.define('user', UserSchema);
  * @returns {Promise<User, APIError>}
  */
 User.get = function get(id) {
-  return this.findById(id)
+  return this.findByPk(id)
     .then((user) => {
       if (user) {
         return user;

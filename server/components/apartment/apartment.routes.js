@@ -52,7 +52,7 @@ router.route('/getAll')
   .get(aptCtrl.list);
 
 router.route('/')
-  .post(validate(paramValidation.manageApartment), multer.array('files'), aptCtrl.create);
+  .post(multer.array('files'), aptCtrl.create);
 
 router.route('/:aptId')
   .get(aptCtrl.get)

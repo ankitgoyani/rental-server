@@ -93,6 +93,7 @@ const uploadImageToStorage = (files) => {
 
 function create(req, res, next) {
   const apt = req.body;
+  apt.userId = req.user.id;
   apt.location = {
     type: 'Point',
     coordinates: JSON.parse(apt.location),

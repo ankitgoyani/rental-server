@@ -29,6 +29,11 @@ const ApartmentSchema = {
     default: 0,
     allowNull: false,
   },
+  price: {
+    type: Sequelize.DataTypes.INTEGER,
+    default: 0,
+    allowNull: false,
+  },
   address: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
