@@ -105,7 +105,7 @@ function create(req, res, next) {
       apt.photos = JSON.stringify(success);
       Apartment.create(apt)
         .then((apartment)=> {
-          apartment.photos = apartment.photos ? JSON.parse(apartment.photos) : null;
+          // apartment.photos = apartment.photos ? JSON.parse(apartment.photos) : null;
           return res.status(201).json(apartment);
         })
         .catch(handleError(res));

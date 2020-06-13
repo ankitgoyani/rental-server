@@ -4,6 +4,8 @@ const Joi = require('joi');
 const aptCtrl = require('./apartment.controller');
 const Multer = require('multer');
 const path = require('path');
+const expressJwt = require('express-jwt');
+const config = require('../../config');
 
 const checkFileType = (file, cb) => {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -50,6 +52,8 @@ const paramValidation = {
 
 router.route('/getAll')
   .get(aptCtrl.list);
+
+router.use(expressJwt({ secret: config.jwtSecret }));
 
 router.route('/')
   .post(multer.array('files'), aptCtrl.create);

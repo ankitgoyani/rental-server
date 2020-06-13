@@ -3,6 +3,9 @@ const validate = require('express-validation');
 const Joi = require('joi');
 const userCtrl = require('./user.controller');
 
+const expressJwt = require('express-jwt');
+const config = require('../../config');
+
 const router = express.Router(); // eslint-disable-line new-cap
 
 const paramValidation = {
@@ -17,6 +20,8 @@ const paramValidation = {
     },
   },
 };
+
+router.use(expressJwt({ secret: config.jwtSecret }));
 
 router.route('/')
   /** GET /api/users - Get list of users */

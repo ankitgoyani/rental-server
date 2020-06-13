@@ -13,6 +13,9 @@ const ApartmentSchema = {
   },
   photos: {
     type: Sequelize.DataTypes.STRING(1500),
+    get(val) {
+      return JSON.parse(this.dataValues[val]);
+    },
   },
   bedrooms: {
     type: Sequelize.DataTypes.INTEGER,
@@ -53,6 +56,9 @@ const ApartmentSchema = {
   utilities: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
+    get(val) {
+      return JSON.parse(this.dataValues[val]);
+    },
   },
   parking: {
     type: Sequelize.DataTypes.ENUM,
