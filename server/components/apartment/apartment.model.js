@@ -45,7 +45,7 @@ const ApartmentSchema = {
     type: Sequelize.DataTypes.GEOMETRY('POINT'),
   },
   summary: {
-    type: Sequelize.DataTypes.STRING,
+    type: Sequelize.DataTypes.STRING(1500),
     allowNull: false,
   },
   type: {
@@ -90,7 +90,7 @@ const Apartment = db.sequelize.define('apartment', ApartmentSchema);
 Apartment.belongsTo(User);
 
 Apartment.get = function get(id) {
-  return this.findById(id)
+  return this.findByPk(id)
     .then((apt) => {
       if (apt) {
         return apt;

@@ -8,7 +8,7 @@ const expressJwt = require('express-jwt');
 const config = require('../../config');
 
 const checkFileType = (file, cb) => {
-  const filetypes = /jpeg|jpg|png|gif/;
+  const filetypes = /jpeg|jpg|png|gif|webp/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
@@ -53,13 +53,15 @@ const paramValidation = {
 router.route('/getAll')
   .get(aptCtrl.list);
 
+router.route('/:aptId')
+  .get(aptCtrl.get);
+
 router.use(expressJwt({ secret: config.jwtSecret }));
 
 router.route('/')
   .post(multer.array('files'), aptCtrl.create);
 
 router.route('/:aptId')
-  .get(aptCtrl.get)
   .put(validate(paramValidation.manageApartment), aptCtrl.update)
   .delete(aptCtrl.destroy);
 

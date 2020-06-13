@@ -44,7 +44,7 @@ function load(req, res, next, id) {
 }
 
 function get(req, res, next) {
-  return Apartment.get(res.params.aptId)
+  return Apartment.get(req.params.aptId)
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
