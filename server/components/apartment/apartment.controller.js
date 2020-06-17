@@ -3,6 +3,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("../../config/key.json");
 const _ = require('lodash');
 const util = require('util');
+const {Op} = require("sequelize");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -68,7 +69,7 @@ function update(req, res, next) {
 const uploadImageToStorage = (files) => {
   let promises = [];
   _.forEach(files, (file) => {
-    promises.push(new Promise( (resolve, reject) => {
+    promises.push(new Promise((resolve, reject) => {
         let newFileName = `${file.originalname}_${Date.now()}`;
         let fileUpload = bucket.file("apartments/" + newFileName);
         const blobStream = fileUpload.createWriteStream({
@@ -79,7 +80,7 @@ const uploadImageToStorage = (files) => {
         blobStream.on('error', (error) => {
           reject({message: 'Something is wrong! Unable to upload at the moment.'});
         });
-        blobStream.on('finish', async function(success) {
+        blobStream.on('finish', async function (success) {
           await fileUpload.makePublic();
           const url = util.format(`https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`);
           resolve(url);
@@ -104,7 +105,7 @@ function create(req, res, next) {
     uploadImageToStorage(req.files).then((success) => {
       apt.photos = JSON.stringify(success);
       Apartment.create(apt)
-        .then((apartment)=> {
+        .then((apartment) => {
           // apartment.photos = apartment.photos ? JSON.parse(apartment.photos) : null;
           return res.status(201).json(apartment);
         })
@@ -117,9 +118,174 @@ function create(req, res, next) {
 }
 
 function list(req, res, next) {
-  const {limit = 50, skip = 0} = req.query;
-  if (req.query) {
-    return Apartment.findAll()
+  const rooms = parseInt(req.query.rooms);
+  const bathrooms = parseInt(req.query.bathrooms);
+  const type = parseInt(req.query.type);
+  const min = parseInt(req.query.min);
+  const max = parseInt(req.query.max);
+  const pets = req.query.pets === 'true';
+  const furnished = req.query.furnished === 'true';
+  const parking = req.query.parking === 'true';
+  const hydro = req.query.hydro === 'true';
+  const heating = req.query.heating === 'true';
+  const water = req.query.water === 'true';
+  const searchString = req.query.searchString;
+  if (Object.keys(req.query).length) {
+    let query = {};
+    if (searchString) {
+      query.address = {
+        [Op.like]: '%' + searchString + '%'
+      }
+    }
+    if (rooms && rooms >= 1) {
+      query.bedrooms = {
+        [Op.eq]: rooms
+      };
+      if (rooms === 3) {
+        query.bedrooms = {
+          [Op.gte]: rooms
+        };
+      }
+    }
+    if (bathrooms && bathrooms >= 1) {
+      query.bathrooms = {
+        [Op.eq]: bathrooms
+      };
+      if (bathrooms === 3) {
+        query.bathrooms = {
+          [Op.gte]: bathrooms
+        };
+      }
+    }
+    if (type && type >= 1) {
+      switch (type) {
+        case 1:
+          query.type = 'Studio';
+          break;
+        case 2:
+          query.type = 'Condo';
+          break;
+        case 3:
+          query.type = 'Duplex';
+          break;
+        case 4:
+          query.type = 'Penthouse';
+          break;
+      }
+    }
+    if (min) {
+      query.price = {
+        [Op.gte]: min
+      };
+    }
+    if (max < 5000) {
+      query.price = {
+        [Op.lte]: max
+      };
+    }
+    if (pets) {
+      query.pets = 'Yes';
+    } else {
+      query.pets = 'No';
+    }
+    if (furnished) {
+      query.furnished = 'Yes';
+    } else {
+      query.furnished = 'No';
+    }
+    if (parking) {
+      query.parking = 'Yes';
+    } else {
+      query.parking = 'No';
+    }
+    if (hydro && heating && water) {
+      query = {
+        ...query,
+        [Op.and]: [
+          {
+            utilities: {
+              [Op.like]: '%Hydro%'
+            }
+          },
+          {
+            utilities: {
+              [Op.like]: '%Heating%'
+            }
+          },
+          {
+            utilities: {
+              [Op.like]: '%Water%'
+            }
+          }
+        ]
+      }
+    } else if (!hydro && heating && water) {
+      query = {
+        ...query,
+        [Op.and]: [
+          {
+            utilities: {
+              [Op.like]: '%Water%'
+            }
+          },
+          {
+            utilities: {
+              [Op.like]: '%Heating%'
+            }
+          }
+        ]
+      }
+    } else if (!hydro && !heating && water) {
+      query.utilities = {
+        [Op.and]: {
+          [Op.like]: '%Water%'
+        }
+      }
+    } else if (hydro && heating && !water) {
+      query = {
+        ...query,
+        [Op.and]: [{
+          utilities: {
+            [Op.like]: '%Hydro%'
+          }
+        },
+          {
+            utilities: {
+              [Op.like]: '%Heating%'
+            }
+          }]
+      };
+    } else if (!hydro && heating && !water) {
+      query.utilities = {
+        [Op.and]: {
+          [Op.like]: '%Heating%'
+        }
+      };
+    } else if (hydro && !heating && !water) {
+      query.utilities = {
+        [Op.and]: {
+          [Op.like]: '%Hydro%'
+        }
+      };
+    } else if (hydro && !heating && water) {
+      query = {
+        ...query,
+        [Op.and]: [{
+          utilities: {
+            [Op.like]: '%Hydro%'
+          }
+        },
+          {
+            utilities: {
+              [Op.like]: '%Water%'
+            }
+          }]
+      };
+    }
+
+    return Apartment.findAll({
+      where: query
+    })
       .then(respondWithResult(res))
       .catch(handleError(res));
   } else {
