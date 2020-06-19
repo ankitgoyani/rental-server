@@ -2,6 +2,7 @@ const express = require('express');
 const userRoutes = require('./user/user.routes');
 const authRoutes = require('./auth/auth.routes');
 const aptRoutes = require('./apartment/apartment.routes');
+const favRoutes = require('./favourites/favourites.routes');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -26,5 +27,6 @@ router.use((req, res, next) => {
 // mount user routes at /users
 router.use('/users', userRoutes);
 router.use('/apartment', aptRoutes.router);
+router.use('/favourites', favRoutes.router);
 
 module.exports = router;

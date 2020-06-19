@@ -1,4 +1,5 @@
 const Apartment = require('./apartment.model');
+const Favourite = require('../favourites/favourites.model');
 const admin = require("firebase-admin");
 const serviceAccount = require("../../config/key.json");
 const _ = require('lodash');
@@ -45,8 +46,26 @@ function load(req, res, next, id) {
 }
 
 function get(req, res, next) {
+  const user = res.locals.session;
   return Apartment.get(req.params.aptId)
-    .then(handleEntityNotFound(res))
+    .then(async (apartment) => {
+      if (user) {
+        let fav = await Favourite.findOne({
+          where: {
+            userId: user.id,
+            apartmentId: apartment.id
+          }
+        });
+        if (fav) {
+          let response = apartment.toJSON();
+          response.favId = fav.id;
+          return response;
+        }
+        return apartment;
+      } else {
+        return apartment;
+      }
+    })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -118,6 +137,7 @@ function create(req, res, next) {
 }
 
 function list(req, res, next) {
+  const user = res.locals.session;
   const rooms = parseInt(req.query.rooms);
   const bathrooms = parseInt(req.query.bathrooms);
   const type = parseInt(req.query.type);
@@ -286,10 +306,72 @@ function list(req, res, next) {
     return Apartment.findAll({
       where: query
     })
+      .then((apartments) => {
+        if (user) {
+          let promises = [];
+          _.forEach(apartments, (apartment) => {
+            promises.push(new Promise((resolve, reject) => {
+              apartment = apartment.toJSON();
+              Favourite.findOne({
+                where: {
+                  userId: user.id,
+                  apartmentId: apartment.id
+                }
+              }).then((fav) => {
+                if (fav) {
+                  apartment.favId = fav.id;
+                  return resolve(apartment);
+                }
+                return resolve(apartment);
+              }).catch((error) => {
+                reject(error);
+              });
+            }));
+          });
+
+          return Promise.all(promises)
+            .then((response) => {
+              return response;
+            })
+        } else {
+          return apartments;
+        }
+      })
       .then(respondWithResult(res))
       .catch(handleError(res));
   } else {
     return Apartment.findAll()
+      .then((apartments) => {
+        if (user) {
+          let promises = [];
+          _.forEach(apartments, (apartment) => {
+            promises.push(new Promise((resolve, reject) => {
+              apartment = apartment.toJSON();
+              Favourite.findOne({
+                where: {
+                  userId: user.id,
+                  apartmentId: apartment.id
+                }
+              }).then((fav) => {
+                if (fav) {
+                  apartment.favId = fav.id;
+                  return resolve(apartment);
+                }
+                return resolve(apartment);
+              }).catch((error) => {
+                reject(error);
+              });
+            }));
+          });
+
+          return Promise.all(promises)
+            .then((response) => {
+              return response;
+            })
+        } else {
+          return apartments;
+        }
+      })
       .then(respondWithResult(res))
       .catch(handleError(res));
   }

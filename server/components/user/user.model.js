@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 const _ = require('lodash');
 const db = require('../../config/db');
 const APIError = require('../../helpers/APIError');
-
+// const Favourite = require('../favourites/favourites.model');
 /**
  * User Schema
  */
@@ -49,6 +49,12 @@ const UserSchema = {
 
 const User = db.sequelize.define('user', UserSchema);
 
+// User.belongsToMany(Favourite, {
+//   through: Favourite,
+//   as: 'usId',
+//   foreignKey: 'usId',
+//   otherKey: 'apartmentId'
+// })
 /**
  * Statics
  */

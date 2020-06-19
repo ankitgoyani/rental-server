@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 const db = require('../../config/db');
 const APIError = require('../../helpers/APIError');
 const User = require('../user/user.model');
+// const Favourite = require('../favourites/favourites.model');
 
 const ApartmentSchema = {
   id: {
