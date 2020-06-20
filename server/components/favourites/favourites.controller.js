@@ -60,7 +60,7 @@ function create(req, res) {
   fav.userId = req.user.id;
 
   Favourite.create(fav)
-    .then(() => res.status(200).json({ message: true }))
+    .then((success) => res.status(200).json({ message: true, id: success.id }))
     .catch(handleError(res));
 }
 
