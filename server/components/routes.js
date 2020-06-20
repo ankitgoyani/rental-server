@@ -20,6 +20,8 @@ router.use((req, res, next) => {
   const authorization = req.header('authorization');
   if (authorization) {
     res.locals.session = JSON.parse(Buffer.from((authorization.split(' ')[1]).split('.')[1], 'base64').toString()); // eslint-disable-line no-param-reassign
+  } else {
+    res.locals.session = undefined;
   }
   next();
 });

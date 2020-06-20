@@ -144,6 +144,7 @@ function list(req, res, next) {
   const min = parseInt(req.query.min);
   const max = parseInt(req.query.max);
   const pets = req.query.pets === 'true';
+  const filtered = req.query.filtered === 'true';
   const furnished = req.query.furnished === 'true';
   const parking = req.query.parking === 'true';
   const hydro = req.query.hydro === 'true';
@@ -203,104 +204,106 @@ function list(req, res, next) {
         [Op.lte]: max
       };
     }
-    if (pets) {
-      query.pets = 'Yes';
-    } else {
-      query.pets = 'No';
-    }
-    if (furnished) {
-      query.furnished = 'Yes';
-    } else {
-      query.furnished = 'No';
-    }
-    if (parking) {
-      query.parking = 'Yes';
-    } else {
-      query.parking = 'No';
-    }
-    if (hydro && heating && water) {
-      query = {
-        ...query,
-        [Op.and]: [
-          {
+    if (filtered) {
+      if (pets) {
+        query.pets = 'Yes';
+      } else {
+        query.pets = 'No';
+      }
+      if (furnished) {
+        query.furnished = 'Yes';
+      } else {
+        query.furnished = 'No';
+      }
+      if (parking) {
+        query.parking = 'Yes';
+      } else {
+        query.parking = 'No';
+      }
+      if (hydro && heating && water) {
+        query = {
+          ...query,
+          [Op.and]: [
+            {
+              utilities: {
+                [Op.like]: '%Hydro%'
+              }
+            },
+            {
+              utilities: {
+                [Op.like]: '%Heating%'
+              }
+            },
+            {
+              utilities: {
+                [Op.like]: '%Water%'
+              }
+            }
+          ]
+        }
+      } else if (!hydro && heating && water) {
+        query = {
+          ...query,
+          [Op.and]: [
+            {
+              utilities: {
+                [Op.like]: '%Water%'
+              }
+            },
+            {
+              utilities: {
+                [Op.like]: '%Heating%'
+              }
+            }
+          ]
+        }
+      } else if (!hydro && !heating && water) {
+        query.utilities = {
+          [Op.and]: {
+            [Op.like]: '%Water%'
+          }
+        }
+      } else if (hydro && heating && !water) {
+        query = {
+          ...query,
+          [Op.and]: [{
             utilities: {
               [Op.like]: '%Hydro%'
             }
           },
-          {
-            utilities: {
-              [Op.like]: '%Heating%'
-            }
-          },
-          {
-            utilities: {
-              [Op.like]: '%Water%'
-            }
+            {
+              utilities: {
+                [Op.like]: '%Heating%'
+              }
+            }]
+        };
+      } else if (!hydro && heating && !water) {
+        query.utilities = {
+          [Op.and]: {
+            [Op.like]: '%Heating%'
           }
-        ]
-      }
-    } else if (!hydro && heating && water) {
-      query = {
-        ...query,
-        [Op.and]: [
-          {
-            utilities: {
-              [Op.like]: '%Water%'
-            }
-          },
-          {
-            utilities: {
-              [Op.like]: '%Heating%'
-            }
-          }
-        ]
-      }
-    } else if (!hydro && !heating && water) {
-      query.utilities = {
-        [Op.and]: {
-          [Op.like]: '%Water%'
-        }
-      }
-    } else if (hydro && heating && !water) {
-      query = {
-        ...query,
-        [Op.and]: [{
-          utilities: {
+        };
+      } else if (hydro && !heating && !water) {
+        query.utilities = {
+          [Op.and]: {
             [Op.like]: '%Hydro%'
           }
-        },
-          {
+        };
+      } else if (hydro && !heating && water) {
+        query = {
+          ...query,
+          [Op.and]: [{
             utilities: {
-              [Op.like]: '%Heating%'
+              [Op.like]: '%Hydro%'
             }
-          }]
-      };
-    } else if (!hydro && heating && !water) {
-      query.utilities = {
-        [Op.and]: {
-          [Op.like]: '%Heating%'
-        }
-      };
-    } else if (hydro && !heating && !water) {
-      query.utilities = {
-        [Op.and]: {
-          [Op.like]: '%Hydro%'
-        }
-      };
-    } else if (hydro && !heating && water) {
-      query = {
-        ...query,
-        [Op.and]: [{
-          utilities: {
-            [Op.like]: '%Hydro%'
-          }
-        },
-          {
-            utilities: {
-              [Op.like]: '%Water%'
-            }
-          }]
-      };
+          },
+            {
+              utilities: {
+                [Op.like]: '%Water%'
+              }
+            }]
+        };
+      }
     }
 
     return Apartment.findAll({
