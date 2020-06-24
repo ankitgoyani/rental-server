@@ -18,6 +18,14 @@ const ApartmentSchema = {
       return JSON.parse(this.dataValues[val]);
     },
   },
+  email: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
+  },
+  phone: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
+  },
   bedrooms: {
     type: Sequelize.DataTypes.INTEGER,
     default: 1,
