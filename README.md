@@ -3,6 +3,9 @@
 This project uses [yarn](https://yarnpkg.com/) package manager.
 This project validates the commit message by [this](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional) convention
 
+### Pre-requisites
+duplicate .env.example and rename it to .env
+
 ### Requirements
 
 #### nodejs : v12.12.0
